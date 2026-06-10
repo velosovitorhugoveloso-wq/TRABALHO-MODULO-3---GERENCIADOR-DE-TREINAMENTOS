@@ -96,6 +96,60 @@ def cadastrar_adm():
 
     return jsonify({"mensagem": "Adm cadastrado!"}), 201
 
+#==========================
+# DELETE ADM
+# ==========================
+
+@app.route('/api/adm/<int:id_adm>', methods=['DELETE'])
+def deletar_adm(id_adm):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    DELETE from adm WHERE ID_ADM = %s
+    """
+
+    cursor.execute(sql, (id_adm,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Adm deletado!"}), 201
+
+# ==========================
+# GET ADM 
+# ==========================
+
+@app.route('/api/adm', methods=['GET'])
+def listar_adm(cpf):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    SELECT
+        ID_ADM,
+        NOME_ADM,
+        EMAIL_ADM,
+        CPF_ADM,
+        TELEFONE_ADM,
+        CARGO_ADM,
+        SETOR_ADM
+    FROM adm
+    WHERE CPF_ADM = %s
+    """
+
+    cursor.execute(sql, (cpf,
+    ))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Relatorio Adm recebido!"}), 201
 
 # ==========================
 # POST FUNCIONÁRIOS
@@ -140,6 +194,27 @@ def cadastrar_fun():
 
     return jsonify({"mensagem": "Funcionário cadastrado!"}), 201
 
+#==========================
+# DELETE FUNCIONARIO
+# ==========================
+
+@app.route('/api/funcionarios/<int:id_fun>', methods=['DELETE'])
+def deletar_funcionario(id_fun):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    DELETE from funcionarios WHERE ID_FUN = %s
+    """
+
+    cursor.execute(sql, (id_fun,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Funcionario deletado!"}), 201
 
 # ==========================
 # POST TREINAMENTOS
@@ -176,6 +251,28 @@ def cadastrar_trein():
 
     return jsonify({"mensagem": "Treinamento cadastrado!"}), 201
 
+
+#==========================
+# DELETE TREINAMENTO
+# ==========================
+
+@app.route('/api/treinamentos/<int:id_trein>', methods=['DELETE'])
+def deletar_treinamentos(id_trein):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    DELETE from treinamentos WHERE ID_TREIN = %s
+    """
+
+    cursor.execute(sql, (id_trein,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Treinamento deletado!"}), 201
 
 # ==========================
 # POST RELATÓRIO
@@ -215,6 +312,28 @@ def cadastrar_rel():
     conn.close()
 
     return jsonify({"mensagem": "Relatório emitido!"}), 201
+
+#==========================
+# DELETE RELATÓTIO
+# ==========================
+
+@app.route('/api/relatorio/<int:id_rel>', methods=['DELETE'])
+def deletar_relatorio(id_rel):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    DELETE from relatorio WHERE ID_REL = %s
+    """
+
+    cursor.execute(sql, (id_rel,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Relatório deletado!"}), 201
 
 
 # ==========================
