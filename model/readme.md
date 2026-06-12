@@ -1,1 +1,1 @@
-<img width="1033" height="571" alt="BDprint" src="https://github.com/user-attachments/assets/2143bbb0-9f8c-444d-b269-54b03020ed6a" />
+<img width="725" height="570" alt="bdprin" src="https://github.com/user-attachments/assets/10f572c3-98d8-4e21-af3c-c5769a637c11" />
