@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block titulo %}Notificações{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Notificações</h2>
+      <p>Envie alertas de vencimento de treinamentos por SMS e WhatsApp</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-titulo">Disparo automático (SMS/WhatsApp)</h3>
+    <p style="font-size:14px; color:var(--texto-suave); margin-bottom:20px;">
+      Serão notificados os funcionários com treinamentos vencidos ou vencendo nos próximos 30 dias
+      (considerando sempre a realização mais recente de cada treinamento), via SMS e WhatsApp (Twilio),
+      usando o telefone cadastrado no sistema.
+    </p>
+    <div id="alertBox"></div>
+    <button class="btn btn-primary" id="btnNotificar" onclick="dispararNotificacoes()">📨 Notificar Funcionários</button>
+  </div>
+
+  <div class="card">
+    <h3 class="card-titulo">Enviar notificação individual pelo sistema</h3>
+    <p style="font-size:14px; color:var(--texto-suave); margin-bottom:20px;">
+      Envie um alerta que aparecerá no sino de notificações do funcionário. Escolha se o aviso é para
+      todos os funcionários ou apenas para um funcionário específico.
+    </p>
+    <div id="alertBoxIndividual"></div>
+    <form id="formNotificacaoIndividual">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Destinatário</label>
+          <select id="nDestino">
+            <option value="geral">Todos os funcionários</option>
+            <option value="individual">Funcionário específico</option>
+          </select>
+        </div>
+        <div class="form-group" id="grupoFuncionarioEspecifico" style="display:none;">
+          <label>Funcionário</label>
+          <select id="nFuncionario"></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="nTitulo" placeholder="Ex: Atualização de escala" required>
+      </div>
+      <div class="form-group">
+        <label>Mensagem</label>
+        <textarea id="nMensagem" placeholder="Escreva o aviso que o funcionário vai ver..." required></textarea>
+      </div>
+      <div class="modal-actions" style="justify-content:flex-start; margin-top:6px;">
+        <button type="submit" class="btn btn-primary" id="btnEnviarIndividual">Enviar notificação</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3 class="card-titulo">Histórico de notificações enviadas</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr><th>Destinatário</th><th>Título</th><th>Tipo</th><th>Enviada em</th><th>Status</th></tr>
+        </thead>
+        <tbody id="corpoHistoricoNotificacoes"></tbody>
+      </table>
+    </div>
+    <div id="vazioHistoricoNotificacoes" class="empty-state" style="display:none;">Nenhuma notificação enviada ainda.</div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/notificacoes.js') }}"></script>
+{% endblock %}

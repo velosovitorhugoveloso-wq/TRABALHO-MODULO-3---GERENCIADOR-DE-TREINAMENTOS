@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %}Relatórios{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Relatórios</h2>
+      <p>{{ 'Situação dos treinamentos realizados por todos os funcionários' if tipo == 'adm' else 'Situação dos seus treinamentos realizados' }}</p>
+    </div>
+    <!-- Botão "Exportar" com menu suspenso (PDF / Excel / CSV) -->
+    <div class="export-dropdown" id="exportDropdown">
+      <button type="button" class="btn btn-primary" id="btnExportar" aria-haspopup="true" aria-expanded="false">
+        📤 Exportar ▾
+      </button>
+      <div class="export-menu" id="exportMenu">
+        <button type="button" class="export-opcao" data-formato="pdf">📄 PDF</button>
+        <button type="button" class="export-opcao" data-formato="xlsx">📊 Excel (XLSX)</button>
+        <button type="button" class="export-opcao" data-formato="csv">📑 CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <!-- Gráficos (Chart.js) -->
+  <div class="dash-grid">
+    <div class="dash-chart-card">
+      <h4>Status dos treinamentos</h4>
+      <canvas id="graficoStatusRelatorios"></canvas>
+    </div>
+    <div class="dash-chart-card">
+      <h4>Realizações por norma (NR)</h4>
+      <canvas id="graficoPorNRRelatorios"></canvas>
+    </div>
+    <div class="dash-chart-card">
+      <h4>Realizações por mês</h4>
+      <canvas id="graficoPorMesRelatorios"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input type="text" id="busca" placeholder="{{ 'Buscar por funcionário ou NR...' if tipo == 'adm' else 'Buscar por NR...' }}">
+      <select id="filtroStatus" style="padding:9px 12px;border:1px solid var(--cinza-borda);border-radius:8px;font-size:13px;">
+        <option value="">Todos os status</option>
+        <option value="valido">Válido</option>
+        <option value="vencendo">Vencendo em 30 dias</option>
+        <option value="vencido">Vencido</option>
+      </select>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            {% if tipo == 'adm' %}<th>Funcionário</th>{% endif %}
+            <th>Treinamento</th><th>Realizado em</th><th>Vencimento</th><th>Status</th>{% if tipo == 'adm' %}<th>Ações</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody id="corpoTabela"></tbody>
+      </table>
+    </div>
+    <div id="vazio" class="empty-state" style="display:none;">Nenhum relatório encontrado.</div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/status-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart-loader.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relatorios.js') }}"></script>
+{% endblock %}

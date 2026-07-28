@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block titulo %}Administradores{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Administradores</h2>
+      <p>Cadastro e gerenciamento dos administradores do sistema</p>
+    </div>
+    <button class="btn btn-primary" onclick="abrirModalNovoAdm()">+ Novo administrador</button>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input type="text" id="buscaAdm" placeholder="Buscar por nome, e-mail ou cargo...">
+    </div>
+    <div id="tabelaAdmWrapper" class="table-responsive scroll-box">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-nome-largo">Nome</th><th>E-mail</th><th class="col-acoes-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabelaAdm"></tbody>
+      </table>
+      <div id="vazioAdm" class="empty-state" style="display:none;">Nenhum administrador cadastrado ainda.</div>
+    </div>
+  </div>
+
+  <!-- MODAL VER MAIS -->
+  <div class="modal-overlay" id="modalVerMaisAdm">
+    <div class="modal-box">
+      <h3>Dados do administrador</h3>
+      <div class="detalhe-lista" id="detalheAdm"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalVerMaisAdm()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalAdm">
+    <div class="modal-box">
+      <h3 id="modalAdmTitulo">Novo administrador</h3>
+      <div id="modalAdmAlert"></div>
+      <form id="formAdm">
+        <input type="hidden" id="aId">
+        <div class="grid-2">
+          <div class="form-group"><label>Nome</label><input type="text" id="aNome" required></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="aEmail" required></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>CPF</label><input type="text" id="aCpf" placeholder="000.000.000-00" inputmode="numeric" required></div>
+          <div class="form-group"><label>Telefone</label><input type="text" id="aTelefone" placeholder="(31) 99999-9999" inputmode="numeric"></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>Cargo</label><input type="text" id="aCargo"></div>
+          <div class="form-group"><label>Setor</label><input type="text" id="aSetor"></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>WhatsApp</label><input type="text" id="aWhatsapp" placeholder="(31) 99999-9999" inputmode="numeric"></div>
+          <div class="form-group"><label>Senha <span style="font-weight:400;color:var(--texto-suave);">(deixe em branco p/ manter)</span></label><input type="password" id="aSenha" placeholder="••••••••"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalAdm()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/administradores.js') }}"></script>
+{% endblock %}

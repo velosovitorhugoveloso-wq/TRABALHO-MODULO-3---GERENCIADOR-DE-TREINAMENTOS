@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block titulo %}Página Inicial{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Página Inicial</h2>
+      <p>Visão geral do sistema de treinamentos NR</p>
+    </div>
+  </div>
+
+  <div class="welcome-card">
+    <h2>Olá, {{ nome }} 👋</h2>
+    <p>{{ 'Gerencie funcionários, treinamentos e relatórios da sua empresa.' if tipo == 'adm' else 'Acompanhe seus treinamentos e realize os que estiverem pendentes.' }}</p>
+  </div>
+
+  <div class="dashboard-actions">
+    {% if tipo == 'adm' %}
+    <button class="dashboard-action-btn" onclick="abrirDashboardGeral()">
+      <span class="emoji">📊</span>
+      <span class="textos">
+        Gerar Dashboard Geral
+        <small>Relatórios, treinamentos e funcionários</small>
+      </span>
+    </button>
+    {% endif %}
+    <button class="dashboard-action-btn" onclick="abrirDashboardFuncionarios()">
+      <span class="emoji">🧑‍💼</span>
+      <span class="textos">
+        Gerar Dashboard de Funcionários
+        <small>{{ 'Visão consolidada de todos os colaboradores' if tipo == 'adm' else 'Seus treinamentos e situação atual' }}</small>
+      </span>
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="filtro-datas">
+      <div class="form-group">
+        <label>De</label>
+        <input type="date" id="filtroDataInicio">
+      </div>
+      <div class="form-group">
+        <label>Até</label>
+        <input type="date" id="filtroDataFim">
+      </div>
+      <div class="filtro-botoes">
+        <button type="button" class="btn btn-primary" id="filtroDashAplicar">Filtrar</button>
+        <button type="button" class="btn btn-secondary" id="filtroDashLimpar">Limpar</button>
+      </div>
+    </div>
+    <p style="margin-top:10px; font-size:12.5px; color:var(--texto-suave);">Filtra os números e gráficos abaixo pela data em que os treinamentos foram realizados.</p>
+  </div>
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px; color:var(--preto);">Acesso rápido</h3>
+    <div class="quick-links">
+      {% if tipo == 'adm' %}
+      <a class="quick-link" href="{{ url_for('pagina_funcionarios') }}">
+        <div class="icone">👥</div>
+        <div class="titulo">Funcionários</div>
+        <div class="desc">Cadastrar, editar e remover colaboradores</div>
+      </a>
+      {% endif %}
+      <a class="quick-link" href="{{ url_for('pagina_treinamentos') }}">
+        <div class="icone">🎓</div>
+        <div class="titulo">Treinamentos</div>
+        <div class="desc">{{ 'Cadastrar e gerenciar as NRs' if tipo == 'adm' else 'Realizar treinamentos disponíveis' }}</div>
+      </a>
+      {% if tipo == 'adm' %}
+      <a class="quick-link" href="{{ url_for('pagina_relatorios') }}">
+        <div class="icone">📊</div>
+        <div class="titulo">Relatórios</div>
+        <div class="desc">Ver validades e status dos treinamentos</div>
+      </a>
+      <a class="quick-link" href="{{ url_for('pagina_notificacoes') }}">
+        <div class="icone">🔔</div>
+        <div class="titulo">Notificações</div>
+        <div class="desc">Enviar alertas de vencimento por SMS/WhatsApp</div>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Modal: Dashboard Geral (somente ADM) -->
+  <div class="modal-overlay" id="modalDashboardGeral">
+    <div class="modal-box modal-lg">
+      <h3>📊 Dashboard Geral</h3>
+      <div id="dashGeralConteudo" class="dash-loading">Carregando dados...</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalDash('modalDashboardGeral')">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Dashboard de Funcionários (ADM e Funcionário) -->
+  <div class="modal-overlay" id="modalDashboardFuncionarios">
+    <div class="modal-box modal-lg">
+      <h3>🧑‍💼 Dashboard de Funcionários</h3>
+      <div id="dashFuncConteudo" class="dash-loading">Carregando dados...</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalDash('modalDashboardFuncionarios')">Fechar</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/status-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart-loader.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard-gerar.js') }}"></script>
+{% endblock %}

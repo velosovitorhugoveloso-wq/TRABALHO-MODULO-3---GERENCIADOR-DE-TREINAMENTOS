@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block titulo %}Treinamentos{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Treinamentos</h2>
+      <p>{{ 'Cadastro das Normas Regulamentadoras (NRs)' if tipo == 'adm' else 'Realize os treinamentos disponíveis' }}</p>
+    </div>
+    {% if tipo == 'adm' %}
+    <button class="btn btn-primary" onclick="abrirModalNovo()">+ Novo treinamento</button>
+    {% endif %}
+  </div>
+
+  {% if tipo == 'funcionario' %}
+  <div class="card">
+    <h3 class="card-titulo">Meu histórico de treinamentos</h3>
+    <div class="table-responsive scroll-box">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-nome-largo">Norma</th><th class="col-validade">Realizado em</th><th class="col-validade">Vencimento</th><th class="col-status">Status</th>
+          </tr>
+        </thead>
+        <tbody id="corpoMeusTreinamentos"></tbody>
+      </table>
+    </div>
+
+    <div id="vazioMeus" class="empty-state" style="display:none;">Você ainda não realizou nenhum treinamento.</div>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <div class="toolbar">
+      <input type="text" id="busca" placeholder="Buscar por NR...">
+    </div>
+    <div class="table-responsive scroll-box">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-nome-largo">Norma</th><th class="col-validade">Validade (dias)</th><th class="col-descricao">Descrição</th><th class="{{ 'col-acoes-trein' if tipo == 'adm' else 'col-status' }}">{{ 'Ações' if tipo == 'adm' else 'Situação' }}</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabela"></tbody>
+      </table>
+    </div>
+    <div id="vazio" class="empty-state" style="display:none;">Nenhum treinamento cadastrado ainda.</div>
+  </div>
+
+  {% if tipo == 'adm' %}
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <h3 id="modalTitulo">Novo treinamento</h3>
+      <div id="modalAlert"></div>
+      <form id="formTreinamento">
+        <input type="hidden" id="tId">
+        <div class="form-group"><label>Norma (ex: NR-06)</label><input type="text" id="tNome" required></div>
+        <div class="form-group"><label>Validade (dias)</label><input type="number" id="tValidade" min="1" required></div>
+        <div class="form-group"><label>Descrição</label><textarea id="tDescricao" placeholder="Descreva do que se trata este treinamento..."></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="modal-overlay" id="modalRealizar">
+    <div class="modal-box">
+      <h3>Realizar treinamento</h3>
+      <div id="modalRealizarAlert"></div>
+      <p style="margin-bottom:16px; font-size:14px; color:var(--texto-suave);" id="textoConfirmacao"></p>
+      <input type="hidden" id="rId">
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalRealizar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="confirmarRealizacao()">Confirmar realização</button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/status-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/treinamentos.js') }}"></script>
+{% endblock %}

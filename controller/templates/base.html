@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>{% block titulo %}Sistema de Treinamentos NR{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  {% block css_extra %}{% endblock %}
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="" onerror="this.style.display='none'">
+        <span>Training Manager</span>
+        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      </div>
+      <nav id="sidebarNav">
+        <a href="{{ url_for('index') }}" class="{{ 'active' if ativo == 'dashboard' else '' }}">🏠 Página Inicial</a>
+        {% if tipo == 'adm' %}
+        <a href="{{ url_for('pagina_funcionarios') }}" class="{{ 'active' if ativo == 'funcionarios' else '' }}">👥 Funcionários</a>
+        {% endif %}
+        <a href="{{ url_for('pagina_treinamentos') }}" class="{{ 'active' if ativo == 'treinamentos' else '' }}">🎓 Treinamentos</a>
+        <a href="{{ url_for('pagina_relatorios') }}" class="{{ 'active' if ativo == 'relatorios' else '' }}">📊 Relatórios</a>
+        {% if tipo == 'adm' %}
+        <a href="{{ url_for('pagina_notificacoes') }}" class="{{ 'active' if ativo == 'notificacoes' else '' }}">🔔 Notificações</a>
+        <a href="{{ url_for('pagina_administradores') }}" class="{{ 'active' if ativo == 'administradores' else '' }}">🛡️ Administradores</a>
+        <a href="{{ url_for('pagina_lixeira') }}" class="{{ 'active' if ativo == 'lixeira' else '' }}">🗑️ Lixeira</a>
+        {% endif %}
+        <a href="{{ url_for('pagina_configuracoes') }}" class="{{ 'active' if ativo == 'configuracoes' else '' }}">⚙️ Configurações</a>
+      </nav>
+      <div class="user-box">
+        <div class="nome">{{ nome }}</div>
+        <div class="tipo">{{ 'Administrador' if tipo == 'adm' else 'Funcionário' }}</div>
+        <a href="{{ url_for('logout') }}" class="sair">Sair</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="sino-notificacoes" id="sinoNotificacoes">
+        <button type="button" class="sino-botao" id="sinoBotao" aria-label="Ver notificações" aria-haspopup="true" aria-expanded="false">
+          🔔<span class="sino-badge" id="sinoBadge" style="display:none;">0</span>
+        </button>
+        <div class="sino-painel" id="sinoPainel">
+          <div class="sino-painel-topo">
+            <span>Notificações</span>
+            <button type="button" class="sino-marcar-lidas" id="sinoMarcarLidas">Marcar todas como lidas</button>
+          </div>
+          <div class="sino-lista" id="sinoLista">
+            <div class="sino-vazio">Carregando...</div>
+          </div>
+        </div>
+      </div>
+      {% block conteudo %}{% endblock %}
+    </main>
+  </div>
+
+  <script>
+    // dados globais de sessão disponíveis para os scripts das páginas
+    window.SESSAO = {
+      tipo: "{{ tipo }}",
+      nome: "{{ nome }}",
+      id: {{ session.get('user_id') if session.get('user_id') is not none else 'null' }}
+    };
+
+    // menu mobile (hamburguer)
+    (function () {
+      const botao = document.getElementById('menuToggle');
+      const nav = document.getElementById('sidebarNav');
+      if (!botao || !nav) return;
+      botao.addEventListener('click', () => {
+        const aberto = nav.classList.toggle('aberto');
+        botao.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+      });
+      nav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('aberto');
+          botao.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+  <script src="{{ url_for('static', filename='js/ui-notify.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/notificacoes-sino.js') }}"></script>
+  {% block js_extra %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block titulo %}Lixeira{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Lixeira</h2>
+      <p>Itens excluídos recentemente — restaure ou remova definitivamente</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input type="text" id="buscaLixeira" placeholder="Buscar por nome ou tipo de registro...">
+      <select id="filtroTipoLixeira">
+        <option value="">Todos os tipos</option>
+        <option value="funcionarios">Funcionários</option>
+        <option value="adm">Administradores</option>
+        <option value="treinamentos">Treinamentos (NRs)</option>
+        <option value="relatorio">Registros de treinamento realizado</option>
+      </select>
+    </div>
+    <div id="tabelaLixeiraWrapper" class="table-responsive scroll-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo</th><th class="col-nome-largo">Registro</th><th>Excluído em</th><th>Excluído por</th><th class="col-acoes-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabelaLixeira"></tbody>
+      </table>
+      <div id="vazioLixeira" class="empty-state" style="display:none;">A lixeira está vazia.</div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/lixeira.js') }}"></script>
+{% endblock %}

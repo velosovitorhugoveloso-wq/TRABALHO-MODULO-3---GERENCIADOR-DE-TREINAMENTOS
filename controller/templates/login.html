@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Login - Sistema de Treinamentos NR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" onerror="this.style.display='none'">
+      <h1>Sistema de Treinamentos NR</h1>
+      <p class="subtitle">Entre com seu e-mail e senha</p>
+
+      <div id="alertBox"></div>
+
+      <form id="formLogin">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@empresa.com" required>
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formLogin');
+    const alertBox = document.getElementById('alertBox');
+
+    const btnEntrar = form.querySelector('button[type="submit"]');
+    const textoOriginalBtn = btnEntrar.innerText;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.innerHTML = '';
+
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+
+      btnEntrar.disabled = true;
+      btnEntrar.innerText = 'Entrando...';
+
+      try {
+        const resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha })
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          alertBox.innerHTML = `<div class="alert alert-erro">${data.erro || 'Não foi possível entrar. Confira seus dados e tente novamente.'}</div>`;
+          return;
+        }
+
+        window.location.href = data.redirect || '/';
+        return;
+      } catch (err) {
+        alertBox.innerHTML = `<div class="alert alert-erro">Não conseguimos falar com o servidor agora. Verifique sua internet e tente novamente.</div>`;
+      }
+      btnEntrar.disabled = false;
+      btnEntrar.innerText = textoOriginalBtn;
+    });
+  </script>
+</body>
+</html>

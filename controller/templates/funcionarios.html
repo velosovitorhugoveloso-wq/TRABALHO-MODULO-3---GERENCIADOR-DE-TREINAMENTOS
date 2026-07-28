@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block titulo %}Funcionários{% endblock %}
+{% block conteudo %}
+  <div class="topbar">
+    <div>
+      <h2>Funcionários</h2>
+      <p>Cadastro e gerenciamento dos colaboradores</p>
+    </div>
+    <button class="btn btn-primary" onclick="abrirModalNovo()">+ Novo funcionário</button>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input type="text" id="busca" placeholder="Buscar por nome, e-mail ou cargo...">
+    </div>
+    <div id="tabelaWrapper" class="table-responsive scroll-box">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-nome-largo">Nome</th><th class="col-situacao">Situação</th><th class="col-acoes-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpoTabela"></tbody>
+      </table>
+      <div id="vazio" class="empty-state" style="display:none;">Nenhum funcionário cadastrado ainda.</div>
+    </div>
+  </div>
+
+  <!-- MODAL VER MAIS -->
+  <div class="modal-overlay" id="modalVerMais">
+    <div class="modal-box">
+      <h3>Dados do funcionário</h3>
+      <div class="detalhe-lista" id="detalheFuncionario"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalVerMais()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <h3 id="modalTitulo">Novo funcionário</h3>
+      <div id="modalAlert"></div>
+      <form id="formFuncionario">
+        <input type="hidden" id="fId">
+        <div class="grid-2">
+          <div class="form-group"><label>Nome</label><input type="text" id="fNome" required></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="fEmail" required></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>CPF</label><input type="text" id="fCpf" placeholder="000.000.000-00" inputmode="numeric" required></div>
+          <div class="form-group"><label>Telefone</label><input type="text" id="fTelefone" placeholder="(31) 99999-9999" inputmode="numeric"></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>Cargo</label><input type="text" id="fCargo"></div>
+          <div class="form-group"><label>Setor</label><input type="text" id="fSetor"></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>WhatsApp</label><input type="text" id="fWhatsapp" placeholder="(31) 99999-9999" inputmode="numeric"></div>
+          <div class="form-group"><label>Senha <span style="font-weight:400;color:var(--texto-suave);">(deixe em branco p/ manter)</span></label><input type="password" id="fSenha" placeholder="••••••••"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block js_extra %}
+<script src="{{ url_for('static', filename='js/funcionarios.js') }}"></script>
+{% endblock %}
